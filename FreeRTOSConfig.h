@@ -123,11 +123,19 @@ to exclude the API function. */
 
 #define INCLUDE_vTaskPrioritySet		0
 #define INCLUDE_uxTaskPriorityGet		0
-#define INCLUDE_vTaskDelete				1
+#define INCLUDE_vTaskDelete				0
 #define INCLUDE_vTaskCleanUpResources	0
 #define INCLUDE_vTaskSuspend			0
 #define INCLUDE_vTaskDelayUntil			1
 #define INCLUDE_vTaskDelay				1
+
+/* It is a good idea to define configASSERT() while developing.  configASSERT()
+uses the same semantics as the standard C assert() macro. */
+extern void vAssertCalled( unsigned long ulLine, const char * const pcFileName );
+#define configASSERT( x ) if( ( x ) == 0 ) vAssertCalled( __LINE__, __FILE__ )
+
+/* Due to problems with integer overflow, this macro is defined here */
+#define pdMS_TO_TICKS( xTimeInMs ) ( ( TickType_t ) ( ( ( unsigned long ) ( xTimeInMs ) * ( unsigned long ) configTICK_RATE_HZ ) / ( unsigned long ) 1000 ) )
 
 
 #endif /* FREERTOS_CONFIG_H */
